@@ -17,7 +17,7 @@ function Incheal:OnEnable(frame)
 		frame.incheal.healBar = CreateFrame("StatusBar", nil, frame)
 		frame.incheal.healBar:SetMinMaxValues(0,1)
 		frame.incheal.healBar:SetValue(1)
-		frame.incheal.healBar:SetFrameLevel(5)
+		frame.incheal.healBar:SetFrameLevel(6)
 		frame.incheal.healBar:SetStatusBarTexture("Interface\\Tooltips\\UI-Tooltip-Background")
 	end
 	if not LunaUF:IsEventRegistered("HealComm_Healupdate") then
