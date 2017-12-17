@@ -190,7 +190,12 @@ function CastLib:GetManaUse()
 	return self.Mana
 end
 
+cliqueSpellRank = 0
+cliqueSpellRankId = 0
+
 function CastLib:CastSpell(spellId, spellbookTabNum)
+	cliqueSpellRankId = cliqueSpellRankId + 1
+
 	-- Call the original function so there's no delay while we process
 	self.hooks.CastSpell(spellId, spellbookTabNum)
 	if self.Spell then
@@ -201,6 +206,7 @@ function CastLib:CastSpell(spellId, spellbookTabNum)
 	_,_,rank = string.find(rank,"(%d+)")
 	self.Channel = spellName
 	self.Rank = rank
+	cliqueSpellRank = rank
 	if ( SpellIsTargeting() ) then
 		-- Spell is waiting for a target
 		self.Spell = spellName
@@ -216,6 +222,8 @@ function CastLib:CastSpell(spellId, spellbookTabNum)
 end
 
 function CastLib:CastSpellByName(spellName, onSelf)
+	cliqueSpellRankId = cliqueSpellRankId + 1
+
 	-- Call the original function
 	self.hooks.CastSpellByName(spellName, onSelf)
 	
@@ -233,6 +241,7 @@ function CastLib:CastSpellByName(spellName, onSelf)
 		end
 		if rank then
 			_,_,rank = string.find(rank,"(%d+)")
+			cliqueSpellRank = rank
 		end
 	end
 	
