@@ -125,6 +125,9 @@ function Health:UpdateColor(frame)
 		frame.healthBar.wasOffline = true
 		self:SetBarColor(frame.healthBar, LunaUF.db.profile.units[frame.unitGroup].healthBar.invert, LunaUF.db.profile.healthColors.offline.r, LunaUF.db.profile.healthColors.offline.g, LunaUF.db.profile.healthColors.offline.b)
 		return
+	elseif (UnitIsDeadOrGhost(frame.unit) or (UnitHealth(frame.unit) == 1 and not UnitIsVisible(frame.unit))) then
+		frame.healthBar.wasDead = true
+		self:SetBarColor(frame.healthBar, LunaUF.db.profile.units[frame.unitGroup].healthBar.invert, LunaUF.db.profile.healthColors.dead.r, LunaUF.db.profile.healthColors.dead.g, LunaUF.db.profile.healthColors.dead.b)
 	elseif( LunaUF.db.profile.units[frame.unitGroup].healthBar.colorAggro and UnitThreatSituation(frame.unit) == 3 ) then
 		self:SetBarColor(frame.healthBar, LunaUF.db.profile.units[frame.unitGroup].healthBar.invert, LunaUF.db.profile.healthColors.hostile.r, LunaUF.db.profile.healthColors.hostile.g, LunaUF.db.profile.healthColors.hostile.b)
 		return
@@ -194,6 +197,12 @@ function Health:Update(frame)
 	-- The unit was offline, but they no longer are so we need to do a forced color update
 	elseif( frame.healthBar.wasOffline ) then
 		frame.healthBar.wasOffline = nil
+		self:UpdateColor(frame)
+	elseif ( frame.isDead) then
+		frame.healthBar.wasDead = true
+		self:SetBarColor(frame.healthBar, LunaUF.db.profile.units[frame.unitGroup].healthBar.invert, LunaUF.db.profile.healthColors.dead.r, LunaUF.db.profile.healthColors.dead.g, LunaUF.db.profile.healthColors.dead.b)
+	elseif ( frame.healthBar.wasDead) then
+		frame.healthBar.wasDead = nil
 		self:UpdateColor(frame)
 	-- Color health by percentage
 	elseif( frame.healthBar.hasPercent ) then

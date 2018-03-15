@@ -97,6 +97,7 @@ local function enUS() return {
 ["friendly"] = "friendly",
 ["neutral"] = "neutral",
 ["offline"] = "offline",
+["dead"] = "dead",
 ["MANA"] = "Mana", 
 ["RAGE"] = "Rage",
 ["FOCUS"] = "Focus", 
