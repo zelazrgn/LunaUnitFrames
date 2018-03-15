@@ -241,9 +241,10 @@ function CastLib:CastSpellByName(spellName, onSelf)
 		end
 		if rank then
 			_,_,rank = string.find(rank,"(%d+)")
-			cliqueSpellRank = rank
 		end
 	end
+
+	cliqueSpellRank = rank
 	
 	if ( spellName ) then
 		if ( SpellIsTargeting() ) then

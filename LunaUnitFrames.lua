@@ -218,11 +218,20 @@ function LunaUF:deepcopy(orig)
     return copy
 end
 
-function LunaUF:CastSpellByName_IgnoreSelfCast(spell, onPlayer)
+function LunaUF:CastSpellByName_IgnoreSelfCast(spell, onPlayer, unit)
 	if type(spell) == "function" then
 		spell()
 		return
 	end
+	
+	if spell == "FASTHEAL" then
+		if unit then
+			spell = LunaUF.HealComm:AutoHeal(unit)
+		else
+			spell = "Lesser Healing Wave(Rank 6)"
+		end
+	end
+
 	local sc = GetCVar("AutoSelfCast")
 	SetCVar("AutoSelfCast", "0")
 	-- make sure that this call doesn't fail, otherwise the CVar may not be restored
@@ -254,7 +263,7 @@ function LunaUF:Mouseover(action)
 		else
 			if UnitExists("target") then
 				if not UnitCanAssist("player", "target") and not func then
-					self:CastSpellByName_IgnoreSelfCast(action)
+					self:CastSpellByName_IgnoreSelfCast(action, nil, unit)
 					SpellTargetUnit(unit)
 				elseif unit == "target" then
 					self:CastSpellByName_IgnoreSelfCast(func or action)
@@ -267,7 +276,7 @@ function LunaUF:Mouseover(action)
 				else
 					self.Units.pauseUpdates = true
 					ClearTarget()
-					self:CastSpellByName_IgnoreSelfCast(action)
+					self:CastSpellByName_IgnoreSelfCast(action, nil, unit)
 					SpellTargetUnit(unit)
 					SpellStopTargeting()
 					TargetLastTarget()
@@ -281,7 +290,7 @@ function LunaUF:Mouseover(action)
 					ClearTarget()
 					self.Units.pauseUpdates = nil
 				else
-					self:CastSpellByName_IgnoreSelfCast(action)
+					self:CastSpellByName_IgnoreSelfCast(action, nil, unit)
 					SpellTargetUnit(unit)
 				end
 			end
