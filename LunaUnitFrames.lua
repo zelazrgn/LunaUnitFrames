@@ -223,12 +223,15 @@ function LunaUF:CastSpellByName_IgnoreSelfCast(spell, onPlayer, unit)
 		spell()
 		return
 	end
-	
-	if spell == "FASTHEAL" then
+
+	local _,_,rank = string.find(spell,"Rank (%w+)")
+	if rank == "auto" then
+		local _, _, spellName = string.find(spell, "^([^%(]+)")
+
 		if unit then
-			spell = LunaUF.HealComm:AutoHeal(unit)
+			spell = LunaUF.HealComm:AutoHeal(spellName, unit)
 		else
-			spell = "Lesser Healing Wave(Rank 6)"
+			spell = spellName -- max rank
 		end
 	end
 

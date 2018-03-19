@@ -1320,7 +1320,7 @@ function HealComm:SendAddonMessage(msg)
 	end
 end
 
-function HealComm:AutoHeal(unit)
+function HealComm:AutoHeal(spell, unit)
 	local incHeal = self:getHeal(UnitName(unit))
 
 	local deficit = UnitHealthMax(unit) - (UnitHealth(unit) + incHeal)
@@ -1329,27 +1329,20 @@ function HealComm:AutoHeal(unit)
 	local buffpower, buffmod = self:GetBuffSpellPower()
 	local Bonus = Bonus + buffpower
 
-	local hwpower, hwmod = self:GetUnitSpellPower(unit, "Healing Wave")
+	local power, mod = self:GetUnitSpellPower(unit, spell)
 
-	for rank=1,2 do
-		local amount = ((math.floor(self.Spells["Healing Wave"][rank](Bonus))+hwpower)*buffmod*hwmod)
+	local ranks = self.Spells[spell];
+	local numRanks = table.getn(ranks)
+
+	for rank = 1, numRanks-1 do
+		local amount = ((math.floor(ranks[rank](Bonus))+power)*buffmod*mod)
 
 		if (amount >= deficit) then
-			return "Healing Wave(Rank " .. rank .. ")"
+			return spell .. "(Rank " .. rank .. ")"
 		end
 	end
 
-	local lhwpower, lhwmod = self:GetUnitSpellPower(unit, "Lesser Healing Wave")
-
-	for rank=1,5 do
-		local amount = ((math.floor(self.Spells["Lesser Healing Wave"][rank](Bonus))+lhwpower)*buffmod*lhwmod)
-
-		if (amount >= deficit) then
-			return "Lesser Healing Wave(Rank " .. rank .. ")"
-		end
-	end
-
-	return "Lesser Healing Wave(Rank 6)"
+	return spell
 end
 
 function HealComm:SPELLCAST_START()
